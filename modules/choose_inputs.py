@@ -1,7 +1,7 @@
 #!/usr/bin/python
 """
 # Author: Scott Chubb scott.chubb@netapp.com
-# Written for Python 3.6 and above
+# Written for Python 3.4 and above
 # No warranty is offered, use at your own risk.  While these scripts have
 #   been tested in lab situations, all use cases cannot be accounted for.
 """
@@ -49,8 +49,9 @@ def get_inputs_api():
     mvip = args.m
     user = args.u
     if not args.p:
-        user_pass = getpass(f"Enter password for user: {user} "
-                            f"on cluster {mvip}: ")
+        user_pass = getpass("Enter password for user: {} "
+                            "on cluster {}: ".format(user,
+                                                     mvip))
     else:
         user_pass = args.p
 
@@ -92,8 +93,9 @@ def get_inputs_node():
     user = args.u
 
     if not args.p:
-        user_pass = getpass(f"Enter password for user {user} "
-                            f"on cluster {node}: ")
+        user_pass = getpass("Enter password for user {} "
+                            "on cluster {}: ".format(user,
+                                                     node))
     else:
         user_pass = args.p
     return node, user, user_pass
@@ -121,15 +123,13 @@ def get_inputs_vol_naa_id():
                         required=False,
                         metavar='user_pass',
                         help='password for user')
-    parser.add_argument('--vol-id', type=int,
+    parser.add_argument('-i', type=int,
                         required=False,
                         metavar='vol_id',
-                        dest='vol_id',
                         help='vol id to search on')
-    parser.add_argument('--naa-id', type=str,
+    parser.add_argument('-s', type=str,
                         required=False,
                         metavar='naa_id',
-                        dest='naa_id',
                         help='naaid to search on')
     parser.add_argument('--sessions',
                         action='store_true',
@@ -139,12 +139,13 @@ def get_inputs_vol_naa_id():
 
     mvip = args.m
     user = args.u
-    naa_id = args.naa_id
-    vol_id = args.vol_id
+    naa_id = args.s
+    vol_id = args.i
     sessions = args.sessions
     if not args.p:
-        user_pass = getpass(f"Enter password for user {user} "
-                            f"on cluster {mvip}: ")
+        user_pass = getpass("Enter password for user {} "
+                            "on cluster {}: ".format(user,
+                                                     mvip))
     else:
         user_pass = args.p
 
@@ -177,8 +178,7 @@ def get_inputs_search_id():
                         metavar='search_id',
                         help='input an id to search for')
     parser.add_argument('--connect', choices=['cluster', 'node'],
-                        required=False,
-                        default='cluster',
+                        required=True,
                         metavar='mvip_node',
                         help='should we connect to a cluster or node')
     args = parser.parse_args()
@@ -186,13 +186,11 @@ def get_inputs_search_id():
     mvip = args.m
     user = args.u
     search_id = args.i
-    if args.connect is not None:
-        mvip_node = args.connect
-    else:
-        mvip_node = 'cluster'
+    mvip_node = args.connect
     if not args.p:
-        user_pass = getpass(f"Enter password for user {user} "
-                            f"on cluster {mvip}: ")
+        user_pass = getpass("Enter password for user {} "
+                            "on cluster {}: ".format(user,
+                                                     mvip))
     else:
         user_pass = args.p
 
@@ -215,15 +213,15 @@ def get_inputs_node_id_or_name():
                         help='username to connect with')
     parser.add_argument('-p', type=str,
                         required=False,
-                        metavar='password',
+                        metavar='user_pass',
                         help='password for user')
     parser.add_argument('-i', type=int,
                         required=False,
-                        metavar='nodeID',
+                        metavar='node_id',
                         help='nodeID to gather from')
     parser.add_argument('-n', type=str,
                         required=False,
-                        metavar='nodeName',
+                        metavar='node_name',
                         help='nodeID to gather from')
     args = parser.parse_args()
 
@@ -238,8 +236,9 @@ def get_inputs_node_id_or_name():
     else:
         node_name = None
     if not args.p:
-        user_pass = getpass(f"Enter password for user {user} "
-                            f"on cluster {mvip}: ")
+        user_pass = getpass("Enter password for user {} "
+                            "on cluster {}: ".format(user,
+                                                     mvip))
     else:
         user_pass = args.p
     return mvip, user, user_pass, node_id, node_name
@@ -285,8 +284,9 @@ def get_inputs_service_info():
     if acct_name is None and acct_id is None:
         all_vols = True
     if not args.p:
-        user_pass = getpass(f"Enter password for user {user} "
-                            f"on cluster {mvip}: ")
+        user_pass = getpass("Enter password for user {} "
+                            "on cluster {}: ".format(user,
+                                                     mvip))
     else:
         user_pass = args.p
     return mvip, user, user_pass, acct_id, acct_name, all_vols
@@ -320,8 +320,9 @@ def get_inputs_repl_cluster_or_vol():
     user = args.u
     check_opt = args.o
     if not args.p:
-        user_pass = getpass(f"Enter password for user {user} "
-                            f"on cluster {mvip}: ")
+        user_pass = getpass("Enter password for user {} "
+                            "on cluster {}: ".format(user,
+                                                     mvip))
     else:
         user_pass = args.p
 
@@ -334,8 +335,7 @@ def get_inputs_default():
     -m mvip
     -u user
     -p user_pass
-    --node node level run
-    --cluster cluster level run
+    --connect mvip or node level run
     """
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', type=str,
@@ -352,24 +352,68 @@ def get_inputs_default():
                         help='password for user')
     parser.add_argument('--connect', choices=['cluster', 'node'],
                         required=False,
-                        default='cluster',
                         metavar='mvip_node',
                         help='should we connect to a cluster or node')
     args = parser.parse_args()
 
     mvip = args.m
     user = args.u
-    if args.connect is not None:
-        mvip_node = args.connect
-    else:
-        mvip_node = 'cluster'
+    mvip_node = args.connect
     if not args.p:
-        user_pass = getpass(f"Enter password for user: {user} "
-                            f"on cluster {mvip}: ")
+        user_pass = getpass("Enter password for user: {} "
+                            "on cluster {}: ".format(user,
+                                                     mvip))
     else:
         user_pass = args.p
 
     return mvip, user, user_pass, mvip_node
+
+
+def get_inputs_default_force():
+    """
+    Basic get user inputs for what to connect to and what credentials to use
+    -m mvip
+    -u user
+    -p user_pass
+    --connect mvip or node level run
+    --force force a reset
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-m', type=str,
+                        required=True,
+                        metavar='mvip',
+                        help='MVIP/node name or IP')
+    parser.add_argument('-u', type=str,
+                        required=True,
+                        metavar='user',
+                        help='username to connect with')
+    parser.add_argument('-p', type=str,
+                        required=False,
+                        metavar='user_pass',
+                        help='password for user')
+    parser.add_argument('--connect', choices=['cluster', 'node'],
+                        required=False,
+                        metavar='mvip_node',
+                        help='should we connect to a cluster or node')
+    parser.add_argument('--force-reset',
+                        dest='force_reset',
+                        default=False,
+                        action='store_true')
+    args = parser.parse_args()
+
+    mvip = args.m
+    user = args.u
+    mvip_node = args.connect
+    if not args.p:
+        user_pass = getpass("Enter password for user: {} "
+                            "on cluster {}: ".format(user,
+                                                     mvip))
+    else:
+        user_pass = args.p
+    
+    force_reset = args.force_reset
+
+    return mvip, user, user_pass, mvip_node, force_reset
 
 
 def get_inputs_ssh():
@@ -378,8 +422,7 @@ def get_inputs_ssh():
     -m mvip
     -u user
     -p user_pass
-    --node node level run
-    --cluster cluster level run
+    --connect mvip or node level run
     """
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', type=str,
@@ -395,8 +438,7 @@ def get_inputs_ssh():
                         metavar='user_pass',
                         help='password for user')
     parser.add_argument('--connect', choices=['cluster', 'node'],
-                        required=False,
-                        default='cluster',
+                        required=True,
                         metavar='mvip_node',
                         help='should we connect to a cluster or node')
     parser.add_argument('--ssh-state', choices=['enable', 'disable'],
@@ -412,16 +454,14 @@ def get_inputs_ssh():
 
     mvip = args.m
     user = args.u
-    if args.connect is not None:
-        mvip_node = args.connect
-    else:
-        args.connect = 'cluster'
+    mvip_node = args.connect
     ssh_state = args.ssh_state
     duration = args.duration
 
     if not args.p:
-        user_pass = getpass(f"Enter password for user: {user} "
-                            f"on cluster {mvip}: ")
+        user_pass = getpass("Enter password for user: {} "
+                            "on cluster {}: ".format(user,
+                                                     mvip))
     else:
         user_pass = args.p
 
@@ -460,9 +500,86 @@ def get_inputs_rtfi():
     user = args.u
     build = args.build
     if not args.p:
-        user_pass = getpass(f"Enter password for user: {user} "
-                            f"on cluster {mvip}: ")
+        user_pass = getpass("Enter password for user: {} "
+                            "on cluster {}: ".format(user,
+                                                     mvip))
     else:
         user_pass = args.p
 
     return mvip, user, user_pass, build
+
+
+def get_inputs_create_vol():
+    """
+    Basic get user inputs for what to connect to and what credentials to use
+    -m mvip
+    -u user
+    -p user_pass
+    --connect mvip or node level run
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-m', type=str,
+                        required=True,
+                        metavar='mvip',
+                        help='MVIP/node name or IP')
+    parser.add_argument('-u', type=str,
+                        required=True,
+                        metavar='user',
+                        help='username to connect with')
+    parser.add_argument('-p', type=str,
+                        required=False,
+                        metavar='user_pass',
+                        help='password for user')
+    parser.add_argument('--connect', choices=['cluster', 'node'],
+                        required=False,
+                        metavar='mvip_node',
+                        help='should we connect to a cluster or node')
+    parser.add_argument('--vol-name', type=str,
+                        required=True,
+                        metavar='vol_name',
+                        help='name of volume to create')
+    parser.add_argument('--acct-id', type=int,
+                        required=True,
+                        metavar='acct_id',
+                        help='account to associate volume with')
+    parser.add_argument('--enable-512e',
+                        choices=['enable', 'disable'],
+                        required=True,
+                        metavar='en_512',
+                        help='set 512 byte emulation')
+    parser.add_argument('--qos-tier',
+                        choices=['silver', 'gold', 'plat'],
+                        required=True,
+                        metavar='qos_tier',
+                        help='name of volume to create')
+    parser.add_argument('--vol-size',
+                        choices=['1T','2T','3T','4T','5T','6T','7T','8T',
+                                 '16g','32g','64g','128g','256g','512g'],
+                        metavar='vol_size',
+                        help='size of volume to create')
+    parser.add_argument('--vol-access-group', type=str,
+                        required=False,
+                        dest="vol_acc_grp",
+                        metavar='vol_acc_grp',
+                        help='volume group to assign to')
+    args = parser.parse_args()
+
+    mvip = args.m
+    user = args.u
+    mvip_node = args.connect
+    if not args.p:
+        user_pass = getpass("Enter password for user: {} "
+                            "on cluster {}: ".format(user,
+                                                     mvip))
+    else:
+        user_pass = args.p
+    vol_name = args.vol_name
+    acct_id = args.acct_id
+    en_512 = args.enable_512e
+    qos_tier = args.qos_tier
+    vol_size = args.vol_size
+    vol_acc_grp = args.vol_acc_grp
+
+
+    return (mvip, user, user_pass, mvip_node, vol_name,
+            acct_id, en_512, qos_tier, vol_size, vol_acc_grp)
