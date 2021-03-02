@@ -88,7 +88,7 @@ def main():
     Call the functions from above
     """
     mvip, user, user_pass, mvip_node = get_inputs()
-    if mvip_node == "cluster":
+    if mvip_node == "cluster" or mvip_node is None:
         print(f"This script must be run with --connect node -m <NODE_IP> "
               f"as it cannot be run at a cluster level")
         sys.exit(1)
