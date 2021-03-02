@@ -7,6 +7,7 @@
 """
 
 import json
+import sys
 from modules.choose_inputs import get_inputs_default as get_inputs
 from modules.build_auth import build_auth
 from modules.connect_cluster import connect_cluster_rest as connect_cluster
@@ -86,8 +87,12 @@ def main():
     """
     Call the functions from above
     """
-    mvip, user, user_pass = get_inputs()
-    headers, url = build_auth(mvip, user, user_pass)
+    mvip, user, user_pass, mvip_node = get_inputs()
+    if mvip_node == "cluster":
+        print(f"This script must be run with --connect node -m <NODE_IP> "
+              f"as it cannot be run at a cluster level")
+        sys.exit(1)
+    headers, url = build_auth(mvip, user, user_pass, mvip_node)
     payload = build_payload()
     response_json = connect_cluster(headers, url, payload)
     get_switch_info(response_json)
