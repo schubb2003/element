@@ -42,7 +42,6 @@ def autosized_table_one_row(hdr_list, data_in):
     out_tbl.field_names = (hdr_list)
     for hdr in hdr_list:
         out_tbl.align[hdr] = 'l'
-    print((data_in))
     if type(data_in) == dict:
         for vals in data_in.values():
             out_tbl.add_row([*vals])
