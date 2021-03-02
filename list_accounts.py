@@ -31,7 +31,6 @@ def create_table(response_json):
     for account in response_json['result']['accounts']:
         account_id = account['accountID']
         account_name = account['username']
-        print(account_id, account_name)
         account_table.add_row([account_id, account_name])
     return account_table
 
