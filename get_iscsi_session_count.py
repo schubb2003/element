@@ -11,7 +11,7 @@ import sys
 from modules.choose_inputs import get_inputs_default as get_inputs
 from modules.build_auth import build_auth
 from modules.connect_cluster import connect_cluster_rest as connect_cluster
-from build_table import build_table_dual_column_dict as build_table
+from modules.build_table import build_table_dual_column_dict as build_table
 
 def get_node_list(headers, url):
     """
