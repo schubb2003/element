@@ -13,7 +13,7 @@
 #           +-----------------+--------------------+
 #           | Cluster Pair ID |    Cluster Name    |
 #           +-----------------+--------------------+
-#           |        1        | SOLIDFIRE-IDN2-002 |
+#           |        1        |  SOLIDFIRE-TEST-2  |
 #           +-----------------+--------------------+
 #           Passed: only one replication target
 """
