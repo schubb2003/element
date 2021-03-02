@@ -178,7 +178,7 @@ def get_inputs_search_id():
                         metavar='search_id',
                         help='input an id to search for')
     parser.add_argument('--connect', choices=['cluster', 'node'],
-                        required=True,
+                        required=False,
                         metavar='mvip_node',
                         help='should we connect to a cluster or node')
     args = parser.parse_args()
@@ -438,7 +438,7 @@ def get_inputs_ssh():
                         metavar='user_pass',
                         help='password for user')
     parser.add_argument('--connect', choices=['cluster', 'node'],
-                        required=True,
+                        required=False,
                         metavar='mvip_node',
                         help='should we connect to a cluster or node')
     parser.add_argument('--ssh-state', choices=['enable', 'disable'],
