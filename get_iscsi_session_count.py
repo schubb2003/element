@@ -11,7 +11,7 @@ import sys
 from modules.choose_inputs import get_inputs_default as get_inputs
 from modules.build_auth import build_auth
 from modules.connect_cluster import connect_cluster_rest as connect_cluster
-from modules.build_table import build_table_dual_column_dict as build_table
+from build_table import build_table_dual_column_dict as build_table
 
 def get_node_list(headers, url):
     """
@@ -37,23 +37,20 @@ def get_iscsi_session_info(headers, url):
     payload = json.dumps({"method": "ListISCSISessions", "params":{}, "id": 1})
     response_json = connect_cluster(headers, url, payload)
     for iqn in response_json['result']['sessions']:
-        #initiator_name = iqn['initiatorName']
+        initiator_name = iqn['initiatorName']
         node_id = iqn['nodeID']
         if node_id in vol_id_array.keys():
             vol_id_array[node_id] = vol_id_array[node_id] + 1
         else:
             vol_id_array[node_id] = 1
-        #target_name = iqn['targetName']
-        #vol_id = target_name.split(".")[5]
+        target_name = iqn['targetName']
+        vol_id = target_name.split(".")[5]
     if len(vol_id_array) == 0:
         print("No iSCSI sessions returned, script will now exit")
         sys.exit(1)
     for key in vol_id_array:
         node_name = node_dict[key]
         node_session_array[node_name] = vol_id_array[key]
-    total_sessions = sum(node_session_array.values())
-    node_session_array['-------------'] = '--------------------'
-    node_session_array["CLUSTER TOTAL"] = total_sessions
     return node_session_array
 
 
