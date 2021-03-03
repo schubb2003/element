@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 # Author: Scott Chubb scott.chubb@netapp.com
-# Written for Python 3.4 and above
+# Written for Python 3.6 and above
 # No warranty is offered, use at your own risk.  While these scripts have been
 #   tested in lab situations, all use cases cannot be accounted for.
 """
@@ -10,7 +10,6 @@ from modules.choose_inputs import get_inputs_default as get_inputs
 from modules.build_auth import build_auth
 from modules.connect_cluster import connect_cluster_rest as connect_cluster
 
-MVIP_NODE = "cluster"
 
 def build_master_id_payload():
     """
@@ -45,7 +44,6 @@ def get_master_id(response_json):
     """
     master_json = response_json
     master_id = master_json['result']['nodeID']
-    #print("MasterID:\t{}".format(master_id))
     return master_id
 
 
@@ -56,7 +54,6 @@ def get_active_nodes(response_json):
     """
     node_dict = {}
     node_list_json = response_json
-    #print("Node list:\n{}".format(node_list_json))
     for node in node_list_json['result']['nodes']:
         node_id = node['nodeID']
         node_name = node['name']
@@ -92,12 +89,13 @@ def get_ensemble(response_json):
             ensemble_dict[node_id] = node_ip
     return ensemble_dict
 
+
 def main():
     """
     Execute the functions from above
     """
-    mvip, user, user_pass, _mvip_node = get_inputs()
-    headers, url = build_auth(mvip, user, user_pass, MVIP_NODE)
+    mvip, user, user_pass, mvip_node = get_inputs()
+    headers, url = build_auth(mvip, user, user_pass, mvip_node)
     master_id_payload = build_master_id_payload()
     ensemble_id_payload = build_ensemble_id_payload()
     node_list_payload = build_node_list_payload()

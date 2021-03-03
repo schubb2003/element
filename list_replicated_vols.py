@@ -24,18 +24,17 @@ from modules.choose_inputs import get_inputs_repl_cluster_or_vol as get_inputs
 from modules.build_auth import build_auth
 from modules.connect_cluster import connect_cluster_rest as connect_cluster
 
+
 def build_payload(check_opt):
     """
     Build the payload for the API call
     """
     if check_opt == "cluster":
         payload = json.dumps({"method": "ListClusterPairs",
-                              "params":{},
-                              "id": 1})
+                              "params": {}, "id": 1})
     else:
         payload = json.dumps({"method": "ListActivePairedVolumes",
-                              "params":{},
-                              "id": 1})
+                              "params": {}, "id": 1})
     return payload
 
 

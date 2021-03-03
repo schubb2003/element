@@ -18,12 +18,12 @@ def build_payload():
     """
     Build the payload for the API
     """
-    payload = json.dumps({"method": "GetClusterStats", "params":{}, "id": 1})
+    payload = json.dumps({"method": "GetClusterStats", "params": {}, "id": 1})
     return payload
 
 
 def build_output(mvip, response_json):
-    #print(json.dumps(response_json, indent=4, sort_keys=True))
+    # print(json.dumps(response_json, indent=4, sort_keys=True))
     cls_stat_dict = {}
     cls_stats = response_json['result']['clusterStats']
     actual_iops = cls_stats['actualIOPS']

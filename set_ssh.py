@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 # Author: Scott Chubb scott.chubb@netapp.com
-# Written for Python 3.4 and above
+# Written for Python 3.6 and above
 # No warranty is offered, use at your own risk.  While these scripts have been
 #   tested in lab situations, all use cases cannot be accounted for.
 #########18-may-2020
@@ -29,17 +29,13 @@ def build_payload(mvip_node, ssh_state, duration_set=None):
     if mvip_node == "cluster":
         ssh_method = ssh_command + "ClusterSsh"
         payload = json.dumps({"method": ssh_method,
-                              "params": {"duration": duration_set}, "id": 1
-                              }
-                            )
+                              "params": {"duration": duration_set}, "id": 1})
         return payload
 
     elif mvip_node == "node":
         ssh_method = ssh_command + "Ssh"
         payload = json.dumps({"method": ssh_method,
-                              "params": {}, "id": 1
-                              }
-                            )
+                              "params": {}, "id": 1})
         return payload
     else:
         print("Expected cluster/node input of:\t{}".format(mvip_node))
@@ -61,7 +57,6 @@ def set_ssh_state(ssh_state, mvip_node, duration_set: None):
         end_time = (right_now + time_delta)
         end_time_out = end_time.isoformat()
 
-
     if ssh_state == "enable":
         if mvip_node == "cluster":
             print("\nSSH has been enabled "
@@ -70,6 +65,7 @@ def set_ssh_state(ssh_state, mvip_node, duration_set: None):
             print("\nSSH has been enabled")
     else:
         print("\nSSH has been disabled")
+
 
 def main():
     """

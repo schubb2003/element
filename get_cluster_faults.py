@@ -16,10 +16,12 @@ from modules.choose_inputs import get_inputs_default as get_inputs
 from modules.build_auth import build_auth
 from modules.connect_cluster import connect_cluster_rest as connect_cluster
 
+
 def build_cluster_events():
-    fault_payload = json.dumps({"method": "ListClusterFaults", 
+    fault_payload = json.dumps({"method": "ListClusterFaults",
                                 "params": {"faultTypes": "current",
-                                "bestPractices": False},"id": 1})
+                                           "bestPractices": False},
+                                "id": 1})
     return fault_payload
 
 
@@ -29,7 +31,7 @@ def parse_events(response_json):
     """
     fault_dict = {}
     for res_out in response_json['result']['faults']:
-        if res_out['resolved']  == False:
+        if res_out['resolved'] is False:
             flt_details = res_out['details']
             flt_node = res_out['nodeID']
             flt_drive = res_out['driveID']
@@ -38,8 +40,8 @@ def parse_events(response_json):
             flt_type = res_out['type']
             flt_sev = res_out['severity']
             flt_key = res_out['clusterFaultID']
-            fault_dict[flt_key] = [flt_node, flt_drive, 
-                                   flt_svc, flt_date, flt_type, 
+            fault_dict[flt_key] = [flt_node, flt_drive,
+                                   flt_svc, flt_date, flt_type,
                                    flt_sev, flt_details]
     if len(fault_dict) == 0:
         print(f"No events found")
@@ -49,8 +51,8 @@ def parse_events(response_json):
 def print_table(outfile_name, fault_dict):
     flt_table = PrettyTable()
     flt_table.field_names = ["Node ID", "Drive ID", "Service ID",
-                             "Date", "Type","Severity", "Details"]
-    #flt_table.max_width['Details'] = 60
+                             "Date", "Type", "Severity", "Details"]
+    # flt_table.max_width['Details'] = 60
     for val in fault_dict.values():
         flt_table.add_row([*val])
     print(flt_table.get_string(sortby="Severity"))
@@ -76,14 +78,13 @@ def main():
     """
     Do the work
     """
-    mvip, user, user_pass, mvip_node  = get_inputs()
+    mvip, user, user_pass, mvip_node = get_inputs()
     fault_payload = build_cluster_events()
     headers, url = build_auth(mvip, user, user_pass, mvip_node)
     response_json = connect_cluster(headers, url, fault_payload)
     fault_dict = parse_events(response_json)
     outfile_name = get_filename(mvip)
     print_table(outfile_name, fault_dict)
- 
 
 
 if __name__ == "__main__":

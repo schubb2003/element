@@ -24,7 +24,7 @@ def build_payload():
 
 def parse_drives(response_json, node_dict):
     """
-    Determine how many drives are being reported, compare against how many 
+    Determine how many drives are being reported, compare against how many
       should exist, return dictionaries of active/failed/missing as well as
       print the information out to the screen
       """

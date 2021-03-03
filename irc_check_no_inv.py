@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 # Author: Scott Chubb scott.chubb@netapp.com
-# Written for Python 3.4 and above
+# Written for Python 3.6 and above
 # No warranty is offered, use at your own risk.  While these scripts have been
 #   tested in lab situations, all use cases cannot be accounted for.
 # 4 Sept 2019, updated to add gethostbyaddr for lookup and ping
@@ -20,6 +20,7 @@ from modules.build_auth import build_auth
 from modules.connect_cluster import connect_cluster_rest as connect_cluster
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
 
 def build_payload(call):
     """
@@ -44,11 +45,12 @@ def get_outputs(headers, url):
                 "GetClusterSshInfo", "GetLdapConfiguration", \
                 "ListClusterAdmins"
     for call in api_calls:
-        print("Gathering information from: {}".format(call))
+        print(f"Gathering information from: {call}")
         payload = build_payload(call)
         response_json = connect_cluster(headers, url, payload)
         output_dict[call] = response_json
     return output_dict
+
 
 def get_cluster_capacity(**output_dict):
     """
@@ -59,8 +61,8 @@ def get_cluster_capacity(**output_dict):
     max_usable = response_json['result']['clusterCapacity']['maxUsedSpace']
     gb_usable_no_prot = (max_usable/1000/1000/1000)
     gib_usable_no_prot = (max_usable/1024/1024/1024)
-    #SolidFire GUI uses base10 math, does not include protection space
-    #  Output both base10 and base2 as well as usable and protected usable
+    # SolidFire GUI uses base10 math, does not include protection space
+    #   Output both base10 and base2 as well as usable and protected usable
 
     max_usable_gb_no_helix = 'Max usable GB without double helix'
     max_usable_gb_helix = 'Max usable GB with double helix'
@@ -109,7 +111,6 @@ def get_cluster_version(**output_dict):
     """
     out_dict = {}
     response_json = output_dict['GetClusterVersionInfo']
-    # print(json.dumps(response_json, sort_keys=True, indent=4))
     hdr1 = 'Setting'
     hdr2 = 'Output'
     out_dict['Cluster Version'] = response_json['result']['clusterVersion']
@@ -151,7 +152,6 @@ def get_hardware_info(**output_dict):
     """
     hw_dict = {}
     response_json = output_dict['GetHardwareInfo']
-    # print(json.dumps(response_json, sort_keys=True, indent=4))
     for node in response_json['result']['nodes']:
         node_id = node['nodeID']
         node_serial = node['result']['hardwareInfo']['chassisSerial']
@@ -183,9 +183,9 @@ def get_active_nodes(**output_dict):
         out_dict['Node ID ' + node_id + ' storage IP'] = (node['sip'])
         out_dict['Node ID ' + node_id + ' version'] = (node['softwareVersion'])
         out_dict['Node ID ' + node_id + ' model'] = (node['platformInfo']
-                                                     ['nodeType'])
+                                                         ['nodeType'])
         node_dict[node_id] = node['name']
-        #Loop through deadnets to get those IPs as well
+        # Loop through deadnets to get those IPs as well
         for v_net in node['virtualNetworks']:
             net_id = v_net['virtualNetworkID']
             if net_id in virt_net_dict.keys():
@@ -218,7 +218,7 @@ def get_pending_active_nodes(**output_dict):
         out_dict['Node ID ' + node_id + ' storage IP'] = (node['sip'])
         out_dict['Node ID ' + node_id + ' version'] = (node['softwareVersion'])
         out_dict['Node ID ' + node_id + ' model'] = (node['platformInfo']
-                                                     ['nodeType'])
+                                                         ['nodeType'])
         node_count = node_count + 1
     if node_count != 0:
         out_dict['----------------'] = '----------------'
@@ -295,7 +295,7 @@ def get_ntp_info(**output_dict):
     out_dict = {}
     ntp_count = 0
     response_json = output_dict['GetNtpInfo']
-    #Loop through possible multiple NTP hosts and output each as a unique item
+    # Loop through possible multiple NTP hosts and output each as a unique item
     for server in response_json['result']['servers']:
         out_dict['NTP server ' + str(ntp_count)] = server
         ntp_count = ntp_count + 1
@@ -321,7 +321,7 @@ def get_snmp_trap_info(**output_dict):
     out_dict['Event traps enabled'] = snmp_cls_evt_trap_enabled
     out_dict['Fault resolved enabled'] = snmp_fault_resolved_trap_enabled
     out_dict['Fault traps enabled'] = snmp_fault_traps_enabled
-    #Loop through possible multiple traphosts and output each as a unique item
+    # Loop through possible multiple traphosts and output each as a unique item
     for traphost in response_json['result']['trapRecipients']:
         out_dict['Host_' + str(traphost_count)] = traphost['host']
         out_dict['Community_' + str(traphost_count)] = traphost['community']
@@ -372,6 +372,7 @@ def get_ldap_configuration(**output_dict):
         hdr2 = 'Setting'
         return hdr1, hdr2, out_dict
 
+
 def parse_network_info(net_bond, response_json):
     """
     Build the network info
@@ -379,7 +380,7 @@ def parse_network_info(net_bond, response_json):
     out_dict = {}
     ip_list = []
     node_count = 0
-    #Build individual node information
+    # Build individual node information
     for node_result in response_json['result']['nodes']:
         for node in response_json['result']['nodes']:
             if node['nodeID'] == node_result['nodeID']:
@@ -450,7 +451,7 @@ def get_virtual_network_info(**output_dict):
     # print(json.dumps(response_json, sort_keys=True, indent=4))
     for virtnet in response_json['result']['virtualNetworks']:
         vlan = str(virtnet['virtualNetworkTag'])
-        #vlan_id = virtnet['virtualNetworkID']
+        # vlan_id = virtnet['virtualNetworkID']
         out_dict['-----VLAN ' + vlan + '-----'] = '--------------'
         out_dict[vlan + ' name'] = virtnet['name']
         out_dict[vlan + ' SVIP'] = virtnet['svip']
@@ -506,7 +507,7 @@ def list_cluster_admins(**output_dict):
     out_dict = {}
     response_json = output_dict['ListClusterAdmins']
     if 'result' not in response_json.keys() and \
-        "xPermissionDenied" in response_json['error']['message']:
+       "xPermissionDenied" in response_json['error']['message']:
         print("No data returned from ListClusterAdmins.\n"
               "Permission denied, is the account a cluster admin?\n")
         hdr1 = 'Cluster Admins'
@@ -552,6 +553,7 @@ def ping_node(ip_list):
     hdr2 = "Ping status"
     sort_order = 1
     return hdr1, hdr2, out_dict, sort_order
+
 
 def build_table(hdr1, hdr2, out_dict, filename, sort_order=None):
     """

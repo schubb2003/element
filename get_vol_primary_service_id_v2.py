@@ -49,7 +49,6 @@ from modules.build_auth import build_auth
 from modules.connect_cluster import connect_cluster_rest as connect_cluster
 
 
-
 def build_payload(call_vols, params):
     """
     Build the API payload
@@ -65,7 +64,7 @@ def get_outputs(headers, url, acct_name):
     # Need all four of these API calls to merge the required data together
     output_dict = {}
     api_call_vols = ["ListVolumes", "ListVolumeStats",
-                      "ListAllNodes", "ListServices"]
+                     "ListAllNodes", "ListServices"]
     if acct_name is not None:
         api_call_vols.append("GetAccountByName")
     for call_vols in api_call_vols:
@@ -130,7 +129,6 @@ def get_account_volumes(acct_id, all_vols, **output_dict):
     """
     vol_dict = {}
     response_json = output_dict['ListVolumes']
-    #print(f"Get account volumes:\n{response_json}")
     for vol in response_json['result']['volumes']:
         if all_vols is False:
             if vol['accountID'] == acct_id:
@@ -150,7 +148,6 @@ def get_volume_slices(vol_dict, all_vols, **output_dict):
     """
     out_dict = {}
     response_json = output_dict['ListVolumeStats']
-    #print(f"Get vol slice:\t{response_json}")
     for vol in response_json['result']['volumeStats']:
         vol_id = vol['volumeID']
         if all_vols is False:

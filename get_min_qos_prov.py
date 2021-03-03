@@ -1,8 +1,10 @@
 #!/usr/bin/python3
+"""
 # Author: Scott Chubb scott.chubb@netapp.com
-# Written for Python 3.4 and above
+# Written for Python 3.6 and above
 # No warranty is offered, use at your own risk.  While these scripts have been
 #   tested in lab situations, all use cases cannot be accounted for.
+"""
 
 import json
 from modules.choose_inputs import get_inputs_default as get_inputs
@@ -17,10 +19,7 @@ def build_payload():
     return that for connect_cluster to gather data
     """
     payload = json.dumps({"method": "ListVolumes",
-                          "params": {},
-                          "id": 1
-                         }
-                        )
+                          "params": {}, "id": 1})
     return payload
 
 
@@ -30,7 +29,7 @@ def do_stuff(response_json):
     for vol in response_json['result']['volumes']:
         qos_min = (vol['qos']['minIOPS'])
         qos_total = qos_total + qos_min
-    print("Total is: {}".format(qos_total))
+    print(f"Total is: {qos_total}")
 
 
 def main():

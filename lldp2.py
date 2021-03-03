@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 # Author: Scott Chubb scott.chubb@netapp.com
-# Written for Python 3.4 and above
+# Written for Python 3.6 and above
 # No warranty is offered, use at your own risk.  While these scripts have been
 #   tested in lab situations, all use cases cannot be accounted for.
 """
@@ -17,7 +17,7 @@ def build_payload():
     """
     Build the payload for the API
     """
-    payload = json.dumps({"method": "GetLldpInfo", "params":{}, "id": 1})
+    payload = json.dumps({"method": "GetLldpInfo", "params": {}, "id": 1})
     return payload
 
 
@@ -25,12 +25,11 @@ def get_switch_info(response_json):
     """
     Call the LLDP API to get switch info
     """
-    #print(json.dumps(response_json, sort_keys=True, indent=4))
     lldp_loads = response_json
     for net_interface in (lldp_loads['result']
-                          ['lldpInfo']
-                          ['lldpNeighbors']
-                          ['lldp']):
+                                    ['lldpInfo']
+                                    ['lldpNeighbors']
+                                    ['lldp']):
         for interfaces in net_interface['interface']:
             for chassis_out in interfaces['chassis']:
                 chassis_type = chassis_out['descr']
@@ -60,7 +59,6 @@ def get_cluster_info(response_json):
     """
     Get the cluster information
     """
-    #print(json.dumps(response_json, sort_keys=True, indent=4))
     vlan_list = []
     lldp_loads = response_json
     for net_interface in (lldp_loads['result']

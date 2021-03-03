@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 # Author: Scott Chubb scott.chubb@netapp.com
-# Written for Python 3.4 and above
+# Written for Python 3.6 and above
 # No warranty is offered, use at your own risk.  While these scripts have been
 #   tested in lab situations, all use cases cannot be accounted for.
 """
@@ -12,14 +12,13 @@ from modules.choose_inputs import get_inputs_default as get_inputs
 from modules.build_auth import build_auth
 from modules.build_table import autosized_table as build_table
 
+
 def build_virt_net_payload():
     """
     Build payload
     """
     payload = json.dumps({"method": "ListVirtualNetworks",
-                          "params": {},
-                          "id": "1",
-                         })
+                          "params": {}, "id": 1})
     return payload
 
 
@@ -46,9 +45,9 @@ def get_virt_net(response_json):
             vnet_size = vnet_blocks['size']
             vnet_avail = vnet_blocks['available']
             vnet_list = [str(vnet_vlan_id), vnet_name,
-                             str(vnet_vlan_tag), vnet_descript,
-                             vnet_svip, vnet_mask, vnet_gateway,
-                             str(vnet_size), str(vnet_avail)]
+                         str(vnet_vlan_tag), vnet_descript,
+                         vnet_svip, vnet_mask, vnet_gateway,
+                         str(vnet_size), str(vnet_avail)]
             virt_net_list.append(vnet_list)
     tbl_headers = ["VLAN ID", "Name", "VLAN Tag", "Description", "SVIP",
                    "Netmask", "Gateway", "Size", "Available"]

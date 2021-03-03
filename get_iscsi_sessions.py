@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 # Author: Scott Chubb scott.chubb@netapp.com
-# Written for Python 3.4 and above
+# Written for Python 3.6 and above
 # No warranty is offered, use at your own risk.  While these scripts have been
 #   tested in lab situations, all use cases cannot be accounted for.
 """
@@ -13,12 +13,13 @@ from modules.build_auth import build_auth
 from modules.connect_cluster import connect_cluster_rest as connect_cluster
 from modules.build_table import autosized_table as build_table
 
+
 def get_node_list(headers, url):
     """
     Build the list of nodes
     """
     node_dict = {}
-    payload = json.dumps({"method": "ListActiveNodes", "params":{}, "id": 1})
+    payload = json.dumps({"method": "ListActiveNodes", "params": {}, "id": 1})
     response_json = connect_cluster(headers, url, payload)
     for node in response_json['result']['nodes']:
         node_name = node['name']
@@ -35,7 +36,8 @@ def get_iscsi_session_info(headers, url, search_id=None):
     iscsi_session_list = []
     sessions_lists = []
     node_dict = node_dict = get_node_list(headers, url)
-    payload = json.dumps({"method": "ListISCSISessions", "params":{}, "id": 1})
+    payload = json.dumps({"method": "ListISCSISessions",
+                          "params": {}, "id": 1})
     response_json = connect_cluster(headers, url, payload)
     for iqn in response_json['result']['sessions']:
         session_id = iqn['sessionID']
@@ -61,7 +63,6 @@ def get_iscsi_session_info(headers, url, search_id=None):
         else:
             sessions_lists.append(iscsi_session_list)
 
-
     if len(vol_id_array) == 0:
         print("No iSCSI sessions returned, script will now exit")
         sys.exit(1)
@@ -79,7 +80,7 @@ def get_table_headers():
     hdr4 = "Volume ID"
     hdr5 = "Volume Name"
     hdr6 = "Initiator"
-    hdr7 =  "Target Host"
+    hdr7 = "Target Host"
     hdr_list = [hdr1, hdr2, hdr3, hdr4, hdr5, hdr6, hdr7]
     return hdr_list
 

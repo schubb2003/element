@@ -11,12 +11,13 @@ from modules.choose_inputs import get_inputs_default as get_inputs
 from modules.build_auth import build_auth
 from modules.connect_cluster import connect_cluster_rest as connect_cluster
 
+
 def build_payload():
     """
     Build the payload for the API
     """
     hw_config_payload = json.dumps({"method": "GetHardwareConfig",
-                                    "params":{"force": True}, "id": 1})
+                                    "params": {"force": True}, "id": 1})
 
     return hw_config_payload
 
