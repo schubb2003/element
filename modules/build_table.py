@@ -1,11 +1,14 @@
 #!/usr/bin/python3
+"""
 # Author: Scott Chubb scott.chubb@netapp.com
 # Written for Python 3.6 and above
 # No warranty is offered, use at your own risk.  While these scripts have been
 #   tested in lab situations, all use cases cannot be accounted for.
+"""
 
 import sys
 from prettytable import PrettyTable
+
 
 def build_table_dual_column_dict(hdr1, hdr2, out_dict):
     """
@@ -18,6 +21,7 @@ def build_table_dual_column_dict(hdr1, hdr2, out_dict):
     for key, value in out_dict.items():
         out_tbl.add_row([key, value])
     print(f"{out_tbl}\n\n")
+
 
 def build_table_triple_column_dict(hdr1, hdr2, hdr3, out_dict):
     """
@@ -35,7 +39,8 @@ def build_table_triple_column_dict(hdr1, hdr2, hdr3, out_dict):
 
 def autosized_table_one_row(hdr_list, data_in):
     """
-    pass headers and values as a list and the system will auto create the table size
+    pass headers and values as a list and the
+      system will auto create the table size.
     Note this is single row only
     """
     out_tbl = PrettyTable()
@@ -55,7 +60,8 @@ def autosized_table_one_row(hdr_list, data_in):
 
 def autosized_table_two_rows(hdr_list, list_one, list_two):
     """
-    pass headers and values as a list and the system will auto create the table size
+    pass headers and values as a list and the
+      system will auto create the table size.
     Note this supports two rows
     """
     out_tbl = PrettyTable()
@@ -69,7 +75,8 @@ def autosized_table_two_rows(hdr_list, list_one, list_two):
 
 def autosized_table(hdr_list, lists):
     """
-    pass headers and a list of lists as a list and the system will auto create the table size
+    pass headers and a list of lists as a list
+      and the system will auto create the table size
     """
     out_tbl = PrettyTable()
     out_tbl.field_names = (hdr_list)
@@ -82,13 +89,24 @@ def autosized_table(hdr_list, lists):
 
 def autosized_table_two_column(data_in):
     """
-    pass headers and values as a list and the system will auto create the table size
-    Note this is single row only
+    pass headers and values as a list and the system
+      will auto create the table size. Note this is single row only
     """
     out_tbl = PrettyTable()
-    out_tbl.field_names = ("API out","Response")
+    out_tbl.field_names = ("API out", "Response")
     out_tbl.align["API out"] = "l"
     out_tbl.align["Response"] = "l"
     for data_key, data_val in data_in.items():
         out_tbl.add_row([data_key, data_val])
     print(f"{out_tbl}\n\n")
+
+
+def main():
+    """
+    Nothing happens here
+    """
+    print("This is a module designed to handle building "
+          "auth credentials to solidfire clusters, exiting.")
+
+if __name__ == "__main__":
+    main()

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 """
 # Author: Scott Chubb scott.chubb@netapp.com
-# Written for Python 3.4 and above
+# Written for Python 3.6 and above
 # No warranty is offered, use at your own risk.  While these scripts have
 #   been tested in lab situations, all use cases cannot be accounted for.
 """
@@ -49,9 +49,8 @@ def get_inputs_api():
     mvip = args.m
     user = args.u
     if not args.p:
-        user_pass = getpass("Enter password for user: {} "
-                            "on cluster {}: ".format(user,
-                                                     mvip))
+        user_pass = getpass(f"Enter password for user: {user} "
+                            f"on cluster: {mvip}")
     else:
         user_pass = args.p
 
@@ -93,9 +92,8 @@ def get_inputs_node():
     user = args.u
 
     if not args.p:
-        user_pass = getpass("Enter password for user {} "
-                            "on cluster {}: ".format(user,
-                                                     node))
+        user_pass = getpass(f"Enter password for user: {user} "
+                            f"on node: {node}")
     else:
         user_pass = args.p
     return node, user, user_pass
@@ -143,9 +141,8 @@ def get_inputs_vol_naa_id():
     vol_id = args.i
     sessions = args.sessions
     if not args.p:
-        user_pass = getpass("Enter password for user {} "
-                            "on cluster {}: ".format(user,
-                                                     mvip))
+        user_pass = getpass(f"Enter password for user: {user} "
+                            f"on cluster: {mvip}")
     else:
         user_pass = args.p
 
@@ -188,9 +185,8 @@ def get_inputs_search_id():
     search_id = args.i
     mvip_node = args.connect
     if not args.p:
-        user_pass = getpass("Enter password for user {} "
-                            "on cluster {}: ".format(user,
-                                                     mvip))
+        user_pass = getpass(f"Enter password for user: {user} "
+                            f"on cluster: {mvip}")
     else:
         user_pass = args.p
 
@@ -236,9 +232,8 @@ def get_inputs_node_id_or_name():
     else:
         node_name = None
     if not args.p:
-        user_pass = getpass("Enter password for user {} "
-                            "on cluster {}: ".format(user,
-                                                     mvip))
+        user_pass = getpass(f"Enter password for user: {user} "
+                            f"on cluster: {mvip}")
     else:
         user_pass = args.p
     return mvip, user, user_pass, node_id, node_name
@@ -284,9 +279,8 @@ def get_inputs_service_info():
     if acct_name is None and acct_id is None:
         all_vols = True
     if not args.p:
-        user_pass = getpass("Enter password for user {} "
-                            "on cluster {}: ".format(user,
-                                                     mvip))
+        user_pass = getpass(f"Enter password for user: {user} "
+                            f"on cluster: {mvip}")
     else:
         user_pass = args.p
     return mvip, user, user_pass, acct_id, acct_name, all_vols
@@ -320,9 +314,8 @@ def get_inputs_repl_cluster_or_vol():
     user = args.u
     check_opt = args.o
     if not args.p:
-        user_pass = getpass("Enter password for user {} "
-                            "on cluster {}: ".format(user,
-                                                     mvip))
+        user_pass = getpass(f"Enter password for user: {user} "
+                            f"on cluster: {mvip}")
     else:
         user_pass = args.p
 
@@ -360,9 +353,8 @@ def get_inputs_default():
     user = args.u
     mvip_node = args.connect
     if not args.p:
-        user_pass = getpass("Enter password for user: {} "
-                            "on cluster {}: ".format(user,
-                                                     mvip))
+        user_pass = getpass(f"Enter password for user: {user} "
+                            f"on cluster: {mvip}")
     else:
         user_pass = args.p
 
@@ -405,12 +397,10 @@ def get_inputs_default_force():
     user = args.u
     mvip_node = args.connect
     if not args.p:
-        user_pass = getpass("Enter password for user: {} "
-                            "on cluster {}: ".format(user,
-                                                     mvip))
+        user_pass = getpass(f"Enter password for user: {user} "
+                            f"on cluster: {mvip}")
     else:
         user_pass = args.p
-    
     force_reset = args.force_reset
 
     return mvip, user, user_pass, mvip_node, force_reset
@@ -459,9 +449,8 @@ def get_inputs_ssh():
     duration = args.duration
 
     if not args.p:
-        user_pass = getpass("Enter password for user: {} "
-                            "on cluster {}: ".format(user,
-                                                     mvip))
+        user_pass = getpass(f"Enter password for user: {user} "
+                            f"on cluster: {mvip}")
     else:
         user_pass = args.p
 
@@ -500,9 +489,8 @@ def get_inputs_rtfi():
     user = args.u
     build = args.build
     if not args.p:
-        user_pass = getpass("Enter password for user: {} "
-                            "on cluster {}: ".format(user,
-                                                     mvip))
+        user_pass = getpass(f"Enter password for user: {user} "
+                            f"on cluster: {mvip}")
     else:
         user_pass = args.p
 
@@ -553,8 +541,9 @@ def get_inputs_create_vol():
                         metavar='qos_tier',
                         help='name of volume to create')
     parser.add_argument('--vol-size',
-                        choices=['1T','2T','3T','4T','5T','6T','7T','8T',
-                                 '16g','32g','64g','128g','256g','512g'],
+                        choices=['1T', '2T', '3T', '4T', '5T', '6T', '7T',
+                                 '8T', '16g', '32g', '64g', '128g', '256g',
+                                 '512g'],
                         metavar='vol_size',
                         help='size of volume to create')
     parser.add_argument('--vol-access-group', type=str,
@@ -568,9 +557,8 @@ def get_inputs_create_vol():
     user = args.u
     mvip_node = args.connect
     if not args.p:
-        user_pass = getpass("Enter password for user: {} "
-                            "on cluster {}: ".format(user,
-                                                     mvip))
+        user_pass = getpass(f"Enter password for user: {user} "
+                            f"on cluster: {mvip}")
     else:
         user_pass = args.p
     vol_name = args.vol_name
@@ -580,6 +568,16 @@ def get_inputs_create_vol():
     vol_size = args.vol_size
     vol_acc_grp = args.vol_acc_grp
 
-
     return (mvip, user, user_pass, mvip_node, vol_name,
             acct_id, en_512, qos_tier, vol_size, vol_acc_grp)
+
+
+def main():
+    """
+    Nothing happens here
+    """
+    print("This is a module designed to handle building "
+          "auth credentials to solidfire clusters, exiting.")
+
+if __name__ == "__main__":
+    main()

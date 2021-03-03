@@ -71,7 +71,7 @@ def build_payload():
     """
     This is where we build the payload to get the API return from the system
     """
-    payload = json.dumps({"method": "GetAPI", "params":{}, "id": 1})
+    payload = json.dumps({"method": "GetAPI", "params": {}, "id": 1})
     return payload
 
 

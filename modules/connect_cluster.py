@@ -13,6 +13,7 @@ import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+
 def connect_cluster_rest(headers, url, payload):
     """
     Self explanatory - this is how we connect to SolidFire cluster
@@ -64,7 +65,6 @@ def connect_cluster_rest(headers, url, payload):
                   f"Script will now exit")
 
     except requests.RequestException as my_except:
-        #mvip = url.split("/")[2]
         if "Max retries exceeded" in str(my_except):
             print(f"Please verify the cluster name is "
                   f"{url} and retry, host did not respond.")
@@ -72,6 +72,7 @@ def connect_cluster_rest(headers, url, payload):
         else:
             str_my_except = str(my_except)
             print(f"Unhandled exception:\n{str_my_except}")
+
 
 def main():
     """
