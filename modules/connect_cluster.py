@@ -61,7 +61,7 @@ def connect_cluster_rest(headers, url, payload):
             sys.exit(res_code)
         elif res_code == 502:
             print(f"Please check that this command is being run against "
-                  f"a node or cluster as expected.  Status: {res_code} "
+                  f"a node or cluster as expected.\nStatus: {res_code} "
                   f" This is usually due to running a node command against "
                   f"a cluster or vice versa")
             sys.exit(res_code)
