@@ -49,7 +49,7 @@ def connect_cluster_rest(headers, url, payload):
                 print(f"Status {res_code}, but error 500.  Unknown API "
                       f"Verify the API call is valid and "
                       f"resubmit\nResponse text is: {res_text}")
-                sys.exit(1)
+                sys.exit(res_code)
             else:
                 print(f"Status {res_code}, but error returned.\n{res_text}"
                       f"verify the error and resubmit")
@@ -58,11 +58,18 @@ def connect_cluster_rest(headers, url, payload):
                   f"node. This can happen during an upgrade when the node "
                   f"responds to pings, but is not serving web traffic. "
                   f"Check the node health and try again")
-            sys.exit(1)
+            sys.exit(res_code)
+        elif res_code == 502:
+            print(f"Please check that this command is being run against "
+                  f"a node or cluster as expected.  Status: {res_code} "
+                  f" This is usually due to running a node command against "
+                  f"a cluster or vice versa")
+            sys.exit(res_code)
         else:
-            print(f"Unexpected HTML status in connect "
-                  f"cluster module: {res_code}.\nError message:\n{res_text}.\n"
+            print(f"Unexpected HTML status in connect cluster module. " 
+                  f"Status code is: {res_code}.\nError message:\n{res_text}.\n"
                   f"Script will now exit")
+            sys.exit(res_code)
 
     except requests.RequestException as my_except:
         if "Max retries exceeded" in str(my_except):
