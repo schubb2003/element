@@ -519,3 +519,48 @@ Using token authentication
 Policy mismatch detected on gold... resetting as reset flag is set to True
 [5000, 100000, 150000]
 {'id': 1, 'result': {'qosPolicy': {'name': 'gold', 'qos': {'burstIOPS': 150000, 'burstTime': 60, 'curve': {'1048576': 15000, '131072': 1950, '16384': 270, '262144': 3900, '32768': 500, '4096': 100, '524288': 7600, '65536': 1000, '8192': 160}, 'maxIOPS': 100000, 'minIOPS': 5000}, 'qosPolicyID': 603, 'volumeIDs': []}}}
+
+#############################################################################
+
+set_ssh.py
+	This script allows you to enable/disable SSH on a cluster or node
+	It defaults to 2hr if no duration is specified
+	This script can be run against a cluster or a node
+
+c:\Git\element-test-branch>python set_ssh.py -h
+usage: set_ssh.py [-h] -m mvip -u user [-p user_pass] [--connect mvip_node]
+                  --ssh-state ssh_state [--duration duration]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -m mvip               MVIP/node name or IP
+  -u user               username to connect with
+  -p user_pass          password for user
+  --connect mvip_node   should we connect via cluster or node, defaults to
+                        cluster
+  --ssh-state ssh_state
+                        enable or disable SSH
+  --duration duration   duration to enable SSH if cluster
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+##Enable - no duration set, set at 12:32pm:##
+c:\Git\element-test-branch>python set_ssh.py -u admin -p solidfire -m solidfire-test --ssh-state enable --connect cluster
+Using token authentication
+
+SSH has been enabled until      2021-03-15T14:32:40.765076 local time
+
+##Enable - 4 hour duration, set at 12:36p:##
+c:\Git\element-test-branch>python set_ssh.py -u admin -p solidfire -m solidfire-test --ssh-state enable --duration 4:00:00
+Using token authentication
+
+SSH has been enabled until      2021-03-15T16:36:59.220394 local time
+
+##Disable##
+c:\Git\element-test-branch>python set_ssh.py -u admin -p solidfire -m solidfire-test --ssh-state disable
+Using token authentication
+
+SSH has been disabled
+
+#############################################################################
+
