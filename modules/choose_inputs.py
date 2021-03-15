@@ -177,7 +177,7 @@ def get_inputs_search_id():
     parser.add_argument('--connect', choices=['cluster', 'node'],
                         required=False,
                         metavar='mvip_node',
-                        help='should we connect to a cluster or node')
+                        help='should we connect via cluster or node, defaults to cluster')
     args = parser.parse_args()
 
     mvip = args.m
@@ -346,7 +346,7 @@ def get_inputs_default():
     parser.add_argument('--connect', choices=['cluster', 'node'],
                         required=False,
                         metavar='mvip_node',
-                        help='should we connect to a cluster or node')
+                        help='should we connect via cluster or node, defaults to cluster')
     args = parser.parse_args()
 
     mvip = args.m
@@ -386,11 +386,12 @@ def get_inputs_default_force():
     parser.add_argument('--connect', choices=['cluster', 'node'],
                         required=False,
                         metavar='mvip_node',
-                        help='should we connect to a cluster or node')
+                        help='should we connect via cluster or node, defaults to cluster')
     parser.add_argument('--force-reset',
                         dest='force_reset',
                         default=False,
-                        action='store_true')
+                        action='store_true',
+                        help='if called will reset any QoS policy to the values set in the configuration section')
     args = parser.parse_args()
 
     mvip = args.m
@@ -430,7 +431,7 @@ def get_inputs_ssh():
     parser.add_argument('--connect', choices=['cluster', 'node'],
                         required=False,
                         metavar='mvip_node',
-                        help='should we connect to a cluster or node')
+                        help='should we connect via cluster or node, defaults to cluster')
     parser.add_argument('--ssh-state', choices=['enable', 'disable'],
                         required=True,
                         metavar='ssh_state',
@@ -521,7 +522,7 @@ def get_inputs_create_vol():
     parser.add_argument('--connect', choices=['cluster', 'node'],
                         required=False,
                         metavar='mvip_node',
-                        help='should we connect to a cluster or node')
+                        help='should we connect via cluster or node, defaults to cluster')
     parser.add_argument('--vol-name', type=str,
                         required=True,
                         metavar='vol_name',
