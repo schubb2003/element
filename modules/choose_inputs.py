@@ -445,7 +445,10 @@ def get_inputs_ssh():
 
     mvip = args.m
     user = args.u
-    mvip_node = args.connect
+    if args.connect is not None:
+        mvip_node = args.connect
+    else:
+        mvip_node = "cluster"
     ssh_state = args.ssh_state
     duration = args.duration
 
