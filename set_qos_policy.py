@@ -63,34 +63,43 @@ def process_actions(list_response_json, headers, url, force_reset):
     else:
         for policy in list_response_json['result']['qosPolicies']:
             pol_name = policy['name']
-            pol_id = policy['qosPolicyID']
-            min_iops = qos_dict['tiers'][pol_name][0]
-            max_iops = qos_dict['tiers'][pol_name][1]
-            burst_iops = qos_dict['tiers'][pol_name][2]
-            pol_min = policy['qos']['minIOPS']
-            pol_max = policy['qos']['maxIOPS']
-            pol_burst = policy['qos']['burstIOPS']
-            if ((min_iops != pol_min or max_iops != pol_max or
-                 burst_iops != pol_burst) and force_reset is True):
-                print(f"Policy mismatch detected on {pol_name}... resetting "
-                      f"as reset flag is set to True")
-                print(qos_dict['tiers'][pol_name])
-                modify_qos_policy(headers, url, pol_id, min_iops,
-                                  max_iops, burst_iops)
-            elif ((min_iops != pol_min or max_iops != pol_max or
-                   burst_iops != pol_burst) and force_reset is False):
-                print(f"Policy mismatch detected on {pol_name}... Leaving "
-                      f"as reset flag is set to false")
+            if pol_name in qos_dict['tiers'].keys():
+                pol_id = policy['qosPolicyID']
+                min_iops = qos_dict['tiers'][pol_name][0]
+                max_iops = qos_dict['tiers'][pol_name][1]
+                burst_iops = qos_dict['tiers'][pol_name][2]
+                pol_min = policy['qos']['minIOPS']
+                pol_max = policy['qos']['maxIOPS']
+                pol_burst = policy['qos']['burstIOPS']
+                if ((min_iops != pol_min or max_iops != pol_max or
+                    burst_iops != pol_burst) and force_reset is True):
+                    print(f"Policy mismatch detected on {pol_name}... resetting "
+                        f"as reset flag is set to True")
+                    print(qos_dict['tiers'][pol_name])
+                    modify_qos_policy(headers, url, pol_id, min_iops,
+                                    max_iops, burst_iops)
+                elif ((min_iops != pol_min or max_iops != pol_max or
+                    burst_iops != pol_burst) and force_reset is False):
+                    print(f"Policy mismatch detected on {pol_name}... Leaving "
+                        f"as reset flag is set to false")
+            else:
+                print(f"QoS Policy {pol_name} found, policy is not in "
+                    f"configuration dictionary.  Ignoring")
+                pass
             if policy['name'] in qos_dict['tiers'].keys():
                 qos_dict['tiers'].pop(pol_name)
-                print(f"policy found: {pol_name} with min {min_iops}, "
-                      f"max {max_iops} and burst {burst_iops}")
+    return qos_dict
+
+def add_missing(qos_dict, headers, url):
+    if len(qos_dict) > 0:
         for pol_name, pol_values in qos_dict['tiers'].items():
             min_iops = pol_values[0]
             max_iops = pol_values[1]
             burst_iops = pol_values[2]
+            print(f"Creating missing policy: {pol_name}")
             payload = build_payload(pol_name, min_iops, max_iops, burst_iops)
             connect_cluster(headers, url, payload)
+
 
 
 def modify_qos_policy(headers, url, pol_id, min_iops, max_iops, burst_iops):
@@ -109,7 +118,8 @@ def main():
     headers, url = build_auth(mvip, user, user_pass, mvip_node)
     list_qos_payload = build_list_qos_payload()
     list_response_json = connect_cluster(headers, url, list_qos_payload)
-    process_actions(list_response_json, headers, url, force_reset)
+    qos_dict = process_actions(list_response_json, headers, url, force_reset)
+    add_missing(qos_dict, headers, url)
 
 if __name__ == "__main__":
     main()
